@@ -691,7 +691,6 @@
             <xsl:for-each select="gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource">
                 <xsl:choose>
                     <xsl:when test="
-                        contains(lower-case(gmd:protocol), 'downloaddata') or
                         contains(lower-case(gmd:protocol), 'get-map')">
                         <xsl:value-of select='true()'/>
                     </xsl:when>
@@ -1650,7 +1649,7 @@
 
             <xsl:variable name="typeToUse">
                <xsl:choose>
-                   <xsl:when test="custom:isKnownOrganisation($name)">
+                   <xsl:when test="boolean(custom:isKnownOrganisation($name)) = true()">
                         <!--xsl:message select="concat('Is known organisation ', $transformedName)"/-->
                         <xsl:text>group</xsl:text>
                     </xsl:when>
@@ -1659,7 +1658,11 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
-
+            
+            <xsl:message select="concat('name:', $name)"/>
+            <xsl:message select="concat('type:', $type)"/>
+            <xsl:message select="concat('typeToUse:', $typeToUse)"/>
+            
             <party type="{$typeToUse}">
                 <name type="primary">
                     <namePart>
@@ -1895,10 +1898,10 @@
                 contains($name, 'Australian Antarctic Division') or
                 contains($name, 'CSIRO Marine and Atmospheric Research') or
                 contains($name, 'Commonwealth Scientific and Industrial Research Organisation')">
-                <xsl:value-of select="true()"/>
+                <xsl:copy-of select="true()"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="false()"/>
+                <xsl:copy-of select="false()"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
@@ -2301,7 +2304,7 @@
         </xsl:choose>
     </xsl:function>
     
-   <xsl:function name="custom:nameNoTitle">
+   <!--xsl:function name="custom:nameNoTitle">
         <xsl:param name="name"/>
         <xsl:variable name="extractedTitle_sequence" select="custom:extractTitle($name)"/>
         <xsl:choose>
@@ -2326,6 +2329,23 @@
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="$name"/>
+            </xsl:otherwise>
+        </xsl:choose>
+   </xsl:function-->
+    
+    <xsl:function name="custom:nameNoTitle">
+        <xsl:param name="name"/>
+        <xsl:message select="concat('Name before extract:', $name)"/>
+        <xsl:variable name="temp" select="replace($name, '(Miss|Mr|Mrs|Ms|Dr|PhD|Assoc/Prof|Professor|Prof)', '')"/>
+        <xsl:variable name="nameNoTitle" select="normalize-space(translate($temp, '.', ''))"/>
+        <xsl:choose>
+            <xsl:when test="substring($nameNoTitle, string-length($nameNoTitle), 1) = ','">
+                <xsl:message select="concat('Returning without last comma: ', substring($nameNoTitle, 1, string-length($nameNoTitle)-1))"/>
+                <xsl:value-of select="substring($nameNoTitle, 1, string-length($nameNoTitle)-1)"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message select="concat('Returning nameNoTitle: ', $nameNoTitle)"/>
+                <xsl:value-of select="$nameNoTitle"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
