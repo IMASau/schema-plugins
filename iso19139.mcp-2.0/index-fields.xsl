@@ -193,8 +193,8 @@
 					</xsl:if>
 				</xsl:for-each>
 
-				<xsl:for-each select="gmd:temporalElement/mcp:EX_TemporalExtent/gmd:extent|gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent">
-					<xsl:for-each select="gml:TimePeriod">
+				<xsl:for-each select="gmd:temporalElement/mcp:EX_TemporalExtent|gmd:temporalElement/gmd:EX_TemporalExtent">
+					<xsl:for-each select="gmd:extent/gml:TimePeriod">
 						<xsl:variable name="times">
 							<xsl:call-template name="newGmlTime">
 								<xsl:with-param name="begin" select="gml:beginPosition|gml:begin/gml:TimeInstant/gml:timePosition"/>
@@ -204,6 +204,10 @@
 
 						<Field name="tempExtentBegin" string="{lower-case(substring-before($times,'|'))}" store="true" index="true"/>
 						<Field name="tempExtentEnd" string="{lower-case(substring-after($times,'|'))}" store="true" index="true"/>
+					</xsl:for-each>
+
+					<xsl:for-each select="*/mcp:MD_TemporalAggregationUnitCode/@codeListValue">
+						<Field name="temporalAggregation" string="{.}" store="false" index="true"/>
 					</xsl:for-each>
 				</xsl:for-each>
 
@@ -319,31 +323,31 @@
 
 			<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 			<xsl:for-each select="gmd:resourceConstraints">
-				<xsl:for-each select="//gmd:accessConstraints/gmd:MD_RestrictionCode/@codeListValue">
+				<xsl:for-each select="*/gmd:accessConstraints/gmd:MD_RestrictionCode/@codeListValue">
 					<Field name="accessConstr" string="{string(.)}" store="true" index="true"/>
 				</xsl:for-each>
-				<xsl:for-each select="//mcp:attributionConstraints/gco:CharacterString">
+				<xsl:for-each select="*/mcp:attributionConstraints/gco:CharacterString">
 					<Field name="attrConstr" string="{string(.)}" store="true" index="true" />
 				</xsl:for-each>
-				<xsl:for-each select="//gmd:otherConstraints/gco:CharacterString">
+				<xsl:for-each select="*/gmd:otherConstraints/gco:CharacterString">
 					<Field name="otherConstr" string="{string(.)}" store="true" index="true"/>
 				</xsl:for-each>
-				<xsl:for-each select="//gmd:classification/gmd:MD_ClassificationCode/@codeListValue">
+				<xsl:for-each select="*/gmd:classification/gmd:MD_ClassificationCode/@codeListValue">
 					<Field name="classif" string="{string(.)}" store="true" index="true"/>
 				</xsl:for-each>
-				<xsl:for-each select="//mcp:jurisdictionLink/gmd:URL">
+				<xsl:for-each select="*/mcp:jurisdictionLink/gmd:URL">
 					<Field name="jurisdictionLink" string="{string(.)}" store="true" index="true" />
 				</xsl:for-each>
-				<xsl:for-each select="//mcp:licenseName/gco:CharacterString">
+				<xsl:for-each select="*/mcp:licenseName/gco:CharacterString">
 					<Field name="licenseName" string="{string(.)}" store="true" index="true" />
 				</xsl:for-each>
-				<xsl:for-each select="//mcp:licenseLink/gmd:URL">
+				<xsl:for-each select="*/mcp:licenseLink/gmd:URL">
 					<Field name="licenseLink" string="{string(.)}" store="true" index="true" />
 				</xsl:for-each>
-				<xsl:for-each select="//gmd:otherCitationDetails/gco:CharacterString">
+				<xsl:for-each select="*/gmd:otherCitationDetails/gco:CharacterString">
 					<Field name="otherCitation" string="{string(.)}" store="true" index="true"/>
 				</xsl:for-each>
-				<xsl:for-each select="//gmd:useLimitation/gco:CharacterString">
+				<xsl:for-each select="*/gmd:useLimitation/gco:CharacterString">
 					<Field name="conditionApplyingToAccessAndUse" string="{string(.)}" store="true" index="true"/>
 				</xsl:for-each>
 			</xsl:for-each>
