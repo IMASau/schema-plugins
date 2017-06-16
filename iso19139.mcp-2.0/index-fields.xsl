@@ -347,11 +347,8 @@
 				<xsl:for-each select="*/mcp:imageLink/gmd:URL">
 					<Field name="imageLink" string="{string(.)}" store="true" index="true" />
 				</xsl:for-each>
-				<xsl:for-each select="*/gmd:otherCitationDetails/gco:CharacterString">
-					<Field name="otherCitation" string="{string(.)}" store="true" index="true"/>
-				</xsl:for-each>
 				<xsl:for-each select="*/gmd:useLimitation/gco:CharacterString">
-					<Field name="conditionApplyingToAccessAndUse" string="{string(.)}" store="true" index="true"/>
+					<Field name="useLimitation" string="{string(.)}" store="true" index="true"/>
 				</xsl:for-each>
 			</xsl:for-each>
 
@@ -485,6 +482,12 @@
 				</xsl:if>
 
 			</xsl:for-each>  
+		</xsl:for-each>
+
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->		
+		<!-- === Point of truth === -->		
+		<xsl:for-each select="gmd:distributionInfo//gmd:CI_OnlineResource[starts-with(gmd:protocol/gco:CharacterString,'WWW:LINK-') and contains(gmd:protocol/gco:CharacterString,'metadata-URL')]/gmd:linkage/gmd:URL">
+			<Field  name="pointOfTruth" string="{string(.)}" store="false" index="true"/>
 		</xsl:for-each>
 
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
