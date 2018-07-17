@@ -48,9 +48,7 @@
             
             <xsl:apply-templates select="gmd:identificationInfo/*:MD_DataIdentification/gmd:status/gmd:MD_ProgressCode" mode="DIF_Data_Set_Progress"/>
             
-            <xsl:apply-templates select="gmd:identificationInfo/*:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:geographicElement" mode="DIF_Spatial_Coverage"/>
-			
-            <xsl:apply-templates select="gmd:identificationInfo/*:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:verticalElement" mode="DIF_Vertical_Coverage"/>			
+            <xsl:apply-templates select="gmd:identificationInfo/*:MD_DataIdentification/gmd:extent/gmd:EX_Extent" mode="DIF_Spatial_Coverage"/>
             
             <xsl:apply-templates select="gmd:identificationInfo/*:MD_DataIdentification/gmd:resourceConstraints/*:MD_Commons/*:otherConstraints" mode="DIF_Access_Constraints"/>
             
@@ -274,7 +272,7 @@
         </Data_Set_Progress>
     </xsl:template>
     
-    <xsl:template match="gmd:geographicElement" mode="DIF_Spatial_Coverage">
+    <xsl:template match="gmd:EX_Extent" mode="DIF_Spatial_Coverage">
     
         <Spatial_Coverage>
             <Southernmost_Latitude>
@@ -288,21 +286,16 @@
             </Westernmost_Longitude>
             <Easternmost_Longitude>
                 <xsl:value-of select="gmd:geographicElement/gmd:EX_GeographicBoundingBox/gmd:eastBoundLongitude"/>
-            </Easternmost_Longitude>	
-		
-		    <xsl:template match="gmd:verticalElement" mode="DIF_Vertical__Coverage">
-                <xsl:if test="contains(lower-case(gml:identifier), '5715')">		
-				    <Minimum_Depth>
-					    <xsl:value-of select="gmd:verticalElement/gmd:EX_VerticalExtent/gmd:minimumValue"/><xsl:text> m</xsl:text>
-				    </Minimum_Depth>
-				    <Maximum_Depth>
-					    <xsl:value-of select="gmd:verticalElement/gmd:EX_VerticalExtent/gmd:maximumValue"/><xsl:text> m</xsl:text>
-				    </Maximum_Depth>
-			    </xsl:if>
-		    </xsl:template>	
+            </Easternmost_Longitude>
+            <Minimum_Depth>
+                <xsl:value-of select="gmd:verticalElement/gmd:EX_VerticalExtent/gmd:minimumValue"/><xsl:text> m</xsl:text>
+            </Minimum_Depth>
+            <Maximum_Depth>
+                <xsl:value-of select="gmd:verticalElement/gmd:EX_VerticalExtent/gmd:maximumValue"/><xsl:text> m</xsl:text>
+            </Maximum_Depth>
         </Spatial_Coverage>
-		
-    </xsl:template>		
+        
+    </xsl:template>
     
     <xsl:template match="*:otherConstraints" mode="DIF_Access_Constraints">
         <Access_Constraints>
