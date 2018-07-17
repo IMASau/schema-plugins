@@ -288,10 +288,10 @@
                 <xsl:value-of select="gmd:geographicElement/gmd:EX_GeographicBoundingBox/gmd:eastBoundLongitude"/>
             </Easternmost_Longitude>
             <Minimum_Depth>
-                <xsl:value-of select="gmd:verticalElement/gmd:EX_VerticalExtent/gmd:minimumValue"/>
+                <xsl:value-of select="gmd:verticalElement/gmd:EX_VerticalExtent/gmd:minimumValue"/><xsl:text> m</xsl:text>
             </Minimum_Depth>
             <Maximum_Depth>
-                <xsl:value-of select="gmd:verticalElement/gmd:EX_VerticalExtent/gmd:maximumValue"/>
+                <xsl:value-of select="gmd:verticalElement/gmd:EX_VerticalExtent/gmd:maximumValue"/><xsl:text> m</xsl:text>
             </Maximum_Depth>
         </Spatial_Coverage>
         
@@ -516,6 +516,9 @@
             <xsl:when test="contains(lower-case($role), 'principalinvestigator')">
                 <xsl:text>INVESTIGATOR</xsl:text>
             </xsl:when>
+            <xsl:when test="contains(lower-case($role), 'coinvestigator')">
+                <xsl:text>INVESTIGATOR</xsl:text>
+            </xsl:when>			
             <xsl:when test="contains(lower-case($role), 'pointofcontact')">
                 <xsl:text>TECHNICAL CONTACT</xsl:text>
             </xsl:when>
